@@ -1,5 +1,6 @@
 import { loadHomeMcpConfig, pluginConfigFor } from "./core/config.js";
 import { McpHub } from "./core/mcpHub.js";
+import { HubPolicy } from "./core/policy.js";
 import { PluginRegistry } from "./core/pluginRegistry.js";
 import { JsonRpcMcpServer, runStdioServer } from "./server/jsonRpcServer.js";
 import { createClockPlugin } from "./plugins/clock/index.js";
@@ -22,4 +23,4 @@ for (const [pluginId, createPlugin] of Object.entries(pluginFactories)) {
 }
 
 await registry.initializeAll();
-await runStdioServer(new JsonRpcMcpServer(new McpHub(registry)));
+await runStdioServer(new JsonRpcMcpServer(new McpHub(registry, new HubPolicy(config.policy))));

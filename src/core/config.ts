@@ -8,7 +8,7 @@ const DEFAULT_CONFIG_PATH = "config/homemcp.json";
 
 export const defaultHomeMcpConfig = {
   server: {
-    name: "HomeMCP",
+    name: "HomeMCP-HUB",
     transport: "stdio",
   },
   plugins: {
@@ -24,8 +24,8 @@ export const defaultHomeMcpConfig = {
         notes: [
           {
             id: "welcome",
-            title: "Welcome to HomeMCP",
-            body: "Plugins own their MCP tools, resources, and prompts; HomeMCP aggregates them.",
+            title: "Welcome to HomeMCP-HUB",
+            body: "Plugins own their MCP tools, resources, and prompts; HomeMCP-HUB aggregates them.",
             createdAt: new Date().toISOString(),
           },
         ],
@@ -53,7 +53,7 @@ export function pluginConfigFor(config: HomeMcpConfig, pluginId: string): Plugin
 function parseConfig(raw: string, path: string): HomeMcpConfig {
   const parsed = JSON.parse(raw) as unknown;
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-    throw new Error(`HomeMCP config '${path}' must be a JSON object`);
+    throw new Error(`HomeMCP-HUB config '${path}' must be a JSON object`);
   }
   return parsed as HomeMcpConfig;
 }

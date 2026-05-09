@@ -1,55 +1,29 @@
-# HomeMCP
+# HomeMCP-HUB
 
-HomeMCP is a lightweight **MCP Hub**. Instead of forcing every source into one central `NormalizedItem` model, each plugin owns the MCP surface that best matches its source: tools, resources, resource templates, and prompts.
+HomeMCP-HUB is a template for adding your own MCP tools and running them together as one integrated MCP server.
 
-The hub core stays intentionally thin:
+Instead of writing MCP SDK boilerplate for every new tool, you can use this repository as a base (or fork it) and implement your desired tools as plugins. HomeMCP-HUB handles common tasks such as tool registration, namespace management (e.g., `plugin_name.tool_name`), and request routing, allowing you to focus purely on the custom logic of your tools.
 
-- register and initialize plugins
-- aggregate plugin-owned `tools/list`, `resources/list`, and `prompts/list`
-- namespace plugin capabilities to avoid collisions
-- dispatch `tools/call`, `resources/read`, and `prompts/get` back to the owning plugin
-- provide shared policy, secrets, logging, and health-check hooks
+[日本語 README](./README.ja.md)
 
-## Architecture
+## Features
 
-```text
-MCP Client / Agent
-        |
-        | MCP JSON-RPC
-        v
-HomeMCP Hub
-  - homemcp.* core tools/resources
-  - namespacing
-  - dispatch
-  - policy/logging/secrets
-        |
-        +--> clock plugin   -> clock.now, homemcp://clock/config
-        +--> memory plugin  -> memory.add_note, memory.search_notes, homemcp://memory/notes/{id}
-        +--> future plugins -> github.*, rss.*, calendar.*, filesystem.*
-```
+- Plugin-owned MCP tools, resources, resource templates, and prompts
+- Namespaced capabilities such as `clock.now` and `memory.search_notes`
+- Stdio JSON-RPC MCP server
+- Common plugin enable/disable configuration
+- Built-in example plugins for clock and in-memory notes
+- TypeScript-first plugin interface
 
-## Why MCP Hub instead of a thick common item layer?
+## Requirements
 
-Information sources naturally expose different operations. A calendar source wants tools like `calendar.find_free_time`, GitHub wants `github.search_issues`, and RSS wants `rss.fetch_latest`. HomeMCP therefore keeps plugin-specific capabilities visible to the agent and only standardizes the MCP boundary.
+- Node.js 22 or later
+- npm
 
-Optional shared services such as cross-plugin search, indexing, scheduling, or caching can be added later without making them mandatory for every plugin.
-
-## Included plugins
-
-### `clock`
-
-- Tool: `clock.now`
-- Resource: `homemcp://clock/config`
-
-### `memory`
-
-- Tools: `memory.add_note`, `memory.search_notes`
-- Resource template: `homemcp://memory/notes/{note_id}`
-- Prompt: `memory.summarize_notes`
-
-## Development
+## Quick Start
 
 ```bash
+npm install
 npm run build
 npm test
 npm start
@@ -57,9 +31,15 @@ npm start
 
 `npm start` runs a newline-delimited JSON-RPC server over stdio.
 
-HomeMCP loads plugin settings from `config/homemcp.json` by default. Set `HOMEMCP_CONFIG` to use another JSON file. If no config file exists, the built-in defaults are used.
+Example request:
 
-Plugins share a common configuration shape:
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}
+```
+
+## Configuration
+
+HomeMCP-HUB loads `config/homemcp.json` by default. Set `HOMEMCP_CONFIG` to use another file. If no config file exists, built-in defaults are used.
 
 ```json
 {
@@ -80,15 +60,24 @@ Plugins share a common configuration shape:
 
 Set `enabled` to `false` to keep a plugin from being registered, initialized, or exposed through MCP.
 
-Example request:
+See [Configuration](./docs/configuration.md) for details.
 
-```json
-{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}
-```
+## Included Plugins
 
-## Plugin shape
+### `clock`
 
-Plugins implement `HomeMcpPlugin`:
+- Tool: `clock.now`
+- Resource: `homemcp://clock/config`
+
+### `memory`
+
+- Tools: `memory.add_note`, `memory.search_notes`
+- Resource template: `homemcp://memory/notes/{note_id}`
+- Prompt: `memory.summarize_notes`
+
+## Plugin Development
+
+Plugins implement `HomeMcpPlugin` and may expose tools, resources, resource templates, prompts, and health checks.
 
 ```ts
 interface HomeMcpPlugin {
@@ -103,4 +92,32 @@ interface HomeMcpPlugin {
 }
 ```
 
-A plugin returns local names such as `search_issues`; HomeMCP publishes them as namespaced MCP names such as `github.search_issues`.
+A plugin returns local names such as `search_issues`; HomeMCP-HUB publishes them as namespaced MCP names such as `github.search_issues`.
+
+See [Plugin Development](./docs/plugin-development.md) for a full guide.
+
+## Architecture
+
+```text
+MCP Client / Agent
+        |
+        | MCP JSON-RPC
+        v
+HomeMCP-HUB
+  - homemcp.* core tools/resources
+  - namespacing
+  - dispatch
+  - policy/logging/secrets
+        |
+        +--> clock plugin   -> clock.now, homemcp://clock/config
+        +--> memory plugin  -> memory.add_note, memory.search_notes
+        +--> future plugins -> github.*, rss.*, calendar.*, filesystem.*
+```
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## License
+
+MIT. See [LICENSE](./LICENSE).

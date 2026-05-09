@@ -27,7 +27,11 @@ export interface HomeMcpConfig {
     transport?: "stdio";
   };
   plugins?: Record<string, PluginConfig>;
-  policy?: Record<string, unknown>;
+  policy?: {
+    tools?: Record<string, boolean>;
+    resources?: Record<string, boolean>;
+    prompts?: Record<string, boolean>;
+  };
 }
 
 export interface PluginLogger {

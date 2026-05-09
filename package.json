@@ -1,9 +1,9 @@
 {
-  "name": "homemcp",
+  "name": "homemcp-hub",
   "version": "0.1.0",
   "description": "A lightweight MCP Hub that aggregates plugin-owned MCP tools, resources, and prompts.",
   "type": "module",
-  "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/src/index.js",

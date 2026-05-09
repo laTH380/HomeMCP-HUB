@@ -1,6 +1,6 @@
 {
   "server": {
-    "name": "HomeMCP",
+    "name": "HomeMCP-HUB",
     "transport": "stdio"
   },
   "plugins": {
@@ -16,8 +16,8 @@
         "notes": [
           {
             "id": "welcome",
-            "title": "Welcome to HomeMCP",
-            "body": "Plugins own their MCP surface; HomeMCP aggregates it."
+            "title": "Welcome to HomeMCP-HUB",
+            "body": "Plugins own their MCP surface; HomeMCP-HUB aggregates it."
           }
         ]
       }

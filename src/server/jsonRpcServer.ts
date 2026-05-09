@@ -42,7 +42,7 @@ export class JsonRpcMcpServer {
       case "initialize":
         return {
           protocolVersion: "2025-11-25",
-          serverInfo: { name: "HomeMCP", version: "0.1.0" },
+          serverInfo: { name: "HomeMCP-HUB", version: "0.1.0" },
           capabilities: {
             tools: { listChanged: true },
             resources: { listChanged: true },
