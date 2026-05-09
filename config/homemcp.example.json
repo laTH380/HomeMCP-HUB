@@ -1,0 +1,34 @@
+{
+  "server": {
+    "name": "HomeMCP",
+    "transport": "stdio"
+  },
+  "plugins": {
+    "clock": {
+      "enabled": true,
+      "config": {
+        "timezone": "UTC"
+      }
+    },
+    "memory": {
+      "enabled": true,
+      "config": {
+        "notes": [
+          {
+            "id": "welcome",
+            "title": "Welcome to HomeMCP",
+            "body": "Plugins own their MCP surface; HomeMCP aggregates it."
+          }
+        ]
+      }
+    }
+  },
+  "policy": {
+    "tools": {
+      "memory.add_note": true,
+      "memory.search_notes": true
+    },
+    "resources": {},
+    "prompts": {}
+  }
+}
