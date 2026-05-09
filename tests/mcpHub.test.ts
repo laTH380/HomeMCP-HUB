@@ -19,6 +19,17 @@ test("rejects duplicate plugin ids", () => {
   assert.throws(() => registry.register(createMemoryPlugin()), /already registered/);
 });
 
+test("skips disabled plugins", async () => {
+  const registry = new PluginRegistry();
+  registry.register(createMemoryPlugin(), { enabled: false });
+  await registry.initializeAll();
+
+  const hub = new McpHub(registry);
+  const tools = await hub.listTools();
+  assert.equal(registry.list().length, 0);
+  assert.ok(!tools.some((tool) => tool.name === "memory.search_notes"));
+});
+
 test("aggregates and dispatches plugin-owned tools", async () => {
   const registry = new PluginRegistry();
   registry.register(createMemoryPlugin(), {

@@ -16,6 +16,20 @@ export interface PluginContext {
   secrets: SecretProvider;
 }
 
+export interface PluginConfig {
+  enabled?: boolean;
+  config?: Record<string, unknown>;
+}
+
+export interface HomeMcpConfig {
+  server?: {
+    name?: string;
+    transport?: "stdio";
+  };
+  plugins?: Record<string, PluginConfig>;
+  policy?: Record<string, unknown>;
+}
+
 export interface PluginLogger {
   debug(message: string, meta?: Record<string, unknown>): void;
   info(message: string, meta?: Record<string, unknown>): void;

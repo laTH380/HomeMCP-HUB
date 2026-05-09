@@ -57,6 +57,29 @@ npm start
 
 `npm start` runs a newline-delimited JSON-RPC server over stdio.
 
+HomeMCP loads plugin settings from `config/homemcp.json` by default. Set `HOMEMCP_CONFIG` to use another JSON file. If no config file exists, the built-in defaults are used.
+
+Plugins share a common configuration shape:
+
+```json
+{
+  "plugins": {
+    "clock": {
+      "enabled": true,
+      "config": {
+        "timezone": "UTC"
+      }
+    },
+    "memory": {
+      "enabled": false,
+      "config": {}
+    }
+  }
+}
+```
+
+Set `enabled` to `false` to keep a plugin from being registered, initialized, or exposed through MCP.
+
 Example request:
 
 ```json

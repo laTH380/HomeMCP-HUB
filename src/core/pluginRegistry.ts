@@ -3,6 +3,7 @@ import { EnvironmentSecretProvider } from "./secrets.js";
 import type { HomeMcpPlugin, PluginContext } from "../types/plugin.js";
 
 export interface PluginRegistrationOptions {
+  enabled?: boolean;
   config?: Record<string, unknown>;
 }
 
@@ -13,6 +14,9 @@ export class PluginRegistry {
 
   register(plugin: HomeMcpPlugin, options: PluginRegistrationOptions = {}): void {
     validatePluginId(plugin.id);
+    if (options.enabled === false) {
+      return;
+    }
     if (this.plugins.has(plugin.id)) {
       throw new Error(`Plugin '${plugin.id}' is already registered`);
     }
